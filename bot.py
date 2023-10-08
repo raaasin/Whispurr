@@ -3,8 +3,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from pGPT import tokenizer,generate_next,to_var,personas,flatten
 import time
-
+dialog_hx=[]
 options = webdriver.ChromeOptions()
 options.add_argument("user-data-dir=C:/Users/dell/AppData/Local/Google/Chrome/User Data")
 driver = webdriver.Chrome(options=options)
@@ -24,9 +25,16 @@ def read_unread_messages():
             # Read and store the latest message
             latest_message = message_text_element.text
             print(latest_message)
-
+            
+            #processing using pGPT
+            user_inp = tokenizer.encode(">> User: "+ latest_message + tokenizer.eos_token)
+            dialog_hx.append(user_inp)
+            bot_input_ids = to_var([personas + flatten(dialog_hx)]).long()
+            msg = generate_next(bot_input_ids)
+            dialog_hx.append(msg)
+            answer="{}".format(tokenizer.decode(msg, skip_special_tokens=True))
             # Process the message using the sendmessage() function
-            sendmessage("You said:" + latest_message)
+            sendmessage(answer)
 
             menu_icon = driver.find_element(By.XPATH, '//span[@data-icon="menu" and @class="kiiy14zj"]')
             menu_icon.click()
