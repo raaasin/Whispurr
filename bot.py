@@ -45,7 +45,7 @@ def read_unread_messages():
             
         except:
             # No more unread messages found, wait for a while before checking again
-            time.sleep(1)
+            time.sleep(0.7)
 
 def sendmessage(message):
     # Locate the message input box and send the message
