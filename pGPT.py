@@ -36,5 +36,5 @@ def generate_next(bot_input_ids, do_sample=True, top_k=10, top_p=.92,
     msg = to_data(full_msg.detach()[0])[bot_input_ids.shape[-1]:]
     return msg
 # get personality facts for conversation
-personas=['I am bot <|endoftext|>', 'I am 19 years old <|endoftext|>', 'I like hotdog <|endoftext|>']
+personas=['I am a chatbot<|endoftext|>', 'I am an invention of Nisar Ahmed <|endoftext|>', 'I love to play games<|endoftext|>', 'I love burgers<|endoftext|>']
 personas = tokenizer.encode(''.join(['<|p2|>'] + personas + ['<|sep|>'] + ['<|start|>']))
