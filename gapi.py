@@ -1,13 +1,16 @@
 import google.generativeai as palm
 from cred import palmpi
+from cred import palmpi
 palm.configure(api_key=palmpi)
 
-count=0
-def chatty(message):
-    global count
-    count+=1
-    response = palm.chat(context="Speak like Shakespeare.",messages=message)
-    if count>=1:
+
+contexts="You are a chatbot replying in place for Nisar Ahmed your master, reply short and make it sweet and tell them that you are replying inplace of your master, remember make it short."
+    
+
+def chatty(message,palm=palm, contexts=contexts,response=None):
+    if response is None:
+        response = palm.chat(context=contexts, messages=message)
+    else:
         response = response.reply(message)
-        return response.last
+
     return response.last

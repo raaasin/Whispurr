@@ -4,7 +4,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from pGPT import tokenizer,generate_next,to_var,personas,flatten
-from gapi import chatty
+from gapi import chatty,reply
+from task import task
 import time
 dialog_hx=[]
 options = webdriver.ChromeOptions()
@@ -14,6 +15,8 @@ driver.get("https://web.whatsapp.com/")
 wait = WebDriverWait(driver, 100)
 
 def read_unread_messages():
+    count = 0
+    tasks=[]
     while True:
         try:
             # Locate the green indicator for unread messages and click it to open the chat
@@ -27,6 +30,12 @@ def read_unread_messages():
             latest_message = message_text_element.text
             print(latest_message)
             answer=chatty(latest_message)
+            checker=task(latest_message)
+            if checker == "yes":
+                tasks.append(latest_message)
+                sendmessage("Nisars tasks are:")
+                for x in tasks:
+                    sendmessage(x)
             #processing using pGPT
             """
             user_inp = tokenizer.encode(">> User: "+ latest_message + tokenizer.eos_token)
