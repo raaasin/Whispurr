@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from pGPT import tokenizer,generate_next,to_var,personas,flatten
-from gapi import chatty,reply
+from gapi import chatty
 from task import task
 import time
 dialog_hx=[]
@@ -30,12 +30,17 @@ def read_unread_messages():
             latest_message = message_text_element.text
             print(latest_message)
             answer=chatty(latest_message)
+            print("got answer")
             checker=task(latest_message)
+            print("checker replied",checker)
             if checker == "yes":
+                print("it said yes")
+                sendmessage("Added the task to Nisars tasks:")
                 tasks.append(latest_message)
-                sendmessage("Nisars tasks are:")
-                for x in tasks:
-                    sendmessage(x)
+                sendmessage("["+",".join(tasks)+"]")
+                sendmessage("Thanks for contacting Nisar, he will get back to you soon")
+            else:
+                sendmessage(answer)
             #processing using pGPT
             """
             user_inp = tokenizer.encode(">> User: "+ latest_message + tokenizer.eos_token)
@@ -46,7 +51,7 @@ def read_unread_messages():
             answer="{}".format(tokenizer.decode(msg, skip_special_tokens=True))
             """
             # Process the message using the sendmessage() function
-            sendmessage(answer)
+            
 
             menu_icon = driver.find_element(By.XPATH, '//span[@data-icon="menu" and @class="kiiy14zj"]')
             menu_icon.click()

@@ -5,13 +5,13 @@ palm.configure(api_key=palmpi)
 model = 'models/text-bison-001'
 
 prompt = """
-If you are assigned to do something or a task or a reques reply 'yes' or reply 'no' strictly only in boolean
+If the message seems like a task or a request then reply 'yes' or reply 'no' strictly only in boolean
 ----------------------------------------------------------
 """
 prompt = prompt + "user said:"
 
 
-def task(message):
+def task(message,prompt=prompt,model=model,palm=palm):
     prompt= prompt + message
     completion = palm.generate_text(
     model=model,
